@@ -9,6 +9,7 @@ import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class PermissionActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.Q)
@@ -20,6 +21,9 @@ class PermissionActivity : AppCompatActivity() {
         val single = findViewById<Button>(R.id.btnSingleDialog)
         val multi = findViewById<Button>(R.id.btnMultiDialog)
         val spinner = findViewById<Spinner>(R.id.spinner_gobar)
+        val bottomNavigation = findViewById<BottomNavigationView>(R.id.bottomNavigation)
+
+        bottomNavigation.getOrCreateBadge(R.id.home).isVisible = true
 
         val yesNoDialog = AlertDialog.Builder(this)
             .setTitle("Bsdk")
@@ -34,6 +38,7 @@ class PermissionActivity : AppCompatActivity() {
         button.setOnClickListener {
            yesNoDialog.show()
         }
+
 
         val options = arrayOf("Gandu, Bokachoda, Suar K Bacha")
         val singleDialog = AlertDialog.Builder(this)
