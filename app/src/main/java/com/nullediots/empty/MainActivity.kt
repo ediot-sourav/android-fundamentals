@@ -1,6 +1,8 @@
 package com.nullediots.empty
 
 import android.Manifest
+import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 
 import android.content.pm.PackageManager
@@ -11,6 +13,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -21,15 +24,36 @@ class MainActivity : AppCompatActivity() {
 
 
 
+    @SuppressLint("CommitPrefEdits")
     @RequiresApi(Build.VERSION_CODES.Q)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        val sharedPref = getSharedPreferences("Superman", Context.MODE_PRIVATE)
+        val editor = sharedPref.edit()
+
         val btnSelected = findViewById<Button>(R.id.btnSelectFromGallery)
         val btnAnotherActivity = findViewById<Button>(R.id.btnAnotherActivity)
         val imageSelected = findViewById<ImageView>(R.id.imageSelected)
         val btnDialogActivity = findViewById<Button>(R.id.btn_dialog)
+        val btnSave = findViewById<Button>(R.id.btnSave)
+        val btnLoad = findViewById<Button>(R.id.btnPref)
+        val etName = findViewById<EditText>(R.id.etName)
+
+        btnSave.setOnClickListener {
+            val name = etName.text.toString()
+
+            editor.apply {
+               putString("name", name)
+                apply()
+            }
+        }
+
+        btnLoad.setOnClickListener {
+          val name = sharedPref.getString("name", null)
+            etName.setText(name)
+        }
 
        val getImage = registerForActivityResult(ActivityResultContracts.GetContent()
        ) {
@@ -48,7 +72,7 @@ class MainActivity : AppCompatActivity() {
             Intent(this, PermissionActivity::class.java).also {
                 startActivity(it)
             }
-        }
+            }
         }
 
     private fun checkStoragePermission() = ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
